@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Search{% endblock %}
+{% block content %}
+<div class="card">
+  <div class="card-header">
+    <h4>M2M tools</h4>
+  </div>
+  <div class="card-body">
+    <form id="searchForm">
+      <div class="mb-3">
+        <label class="form-label">Enter Number or URL</label>
+        <input type="text" class="form-control form-control-lg" name="query"
+               placeholder="e.g. 085211648515 or https://..." required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-lg">Search</button>
+    </form>
+
+    <div id="results" class="mt-4"></div>
+  </div>
+</div>
+
+<script>
+document.getElementById('searchForm').onsubmit = async function(e){
+  e.preventDefault();
+  const fd = new FormData(this);
+  const r = await fetch('/search', {method:'POST', body:fd});
+  const d = await r.json();
+
+  let html = `<div class="alert alert-info">Found ${d.matches} matches</div>`;
+  html += `<div class="table-responsive"><table class="table table-striped"><thead><tr>
+    <th>Input</th><th>File</th><th>Match Col</th><th>Match Val</th>
+    <th>SN</th><th>MSISDN</th><th>ICCID</th><th>IMSI</th><th>Status</th><th>Time</th>
+  </tr></thead><tbody>`;
+
+  const rows = d.csv.trim().split('\n').slice(1);
+  rows.forEach(row => {
+    const cols = row.split(',').map(c=>c.replace(/^"|"$/g,''));
+    html += '<tr>' + cols.map(c=>`<td>${c}</td>`).join('') + '</tr>';
+  });
+  html += `</tbody></table></div>`;
+  html += `<button class="btn btn-success mt-3" onclick="downloadCSV('${btoa(d.csv)}','${d.filename}')">
+            Download CSV
+           </button>`;
+  document.getElementById('results').innerHTML = html;
+};
+
+function downloadCSV(b64, filename) {
+  const csv = atob(b64);
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+{% endblock %}

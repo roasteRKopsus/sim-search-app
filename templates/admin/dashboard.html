@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="row">
+  <div class="col-md-3">
+    <div class="card text-white bg-primary mb-3">
+      <div class="card-body">
+        <h5>Uploaded Files</h5>
+        <h2>{{ total_files }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-white bg-success mb-3">
+      <div class="card-body">
+        <h5>Total Records</h5>
+        <h2>{{ total_records }}</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-3">
+    <div class="card text-white bg-info mb-3">
+      <div class="card-body">
+        <h5>Searches</h5>
+        <h2>{{ total_searches }}</h2>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h4>Recent Searches</h4>
+<table class="table table-sm">
+  <thead><tr><th>Input</th><th>Status</th><th>Time</th></tr></thead>
+  <tbody>
+    {% for r in recent %}
+    <tr>
+      <td>{{ r.input_value[:30] }}...</td>
+      <td><span class="badge bg-{{ 'success' if r.status else 'danger' }}">{{ 'TRUE' if r.status else 'FALSE' }}</span></td>
+      <td>{{ r.searched_at.strftime('%H:%M:%S') }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<div class="mt-4">
+  <a href="{{ url_for('admin.admin_files') }}" class="btn btn-outline-primary">Manage Files</a>
+  <a href="{{ url_for('admin.admin_logs') }}" class="btn btn-outline-info">View Logs</a>
+</div>
+{% endblock %}

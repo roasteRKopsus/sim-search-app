@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>M2M Tools</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+  <!-- THEME TOGGLE -->
+  <div class="theme-toggle" onclick="toggleTheme()" title="Toggle Dark Mode">
+    <i id="theme-icon" class="bi bi-moon-stars"></i>
+  </div>
+
+  <!-- SIDEBAR -->
+  <div id="mySidebar" class="sidebar">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+    
+    <a href="/" class="d-flex align-items-center gap-3 {% if request.path == '/' %}active{% endif %}">
+      <i class="bi bi-search"></i> Search SIM
+    </a>
+    
+    <a href="/upload" class="d-flex align-items-center gap-3 {% if request.path == '/upload' %}active{% endif %}">
+      <i class="bi bi-cloud-upload"></i> Upload Data
+    </a>
+    
+    <a href="/data" class="d-flex align-items-center gap-3 {% if request.path.startswith('/data') %}active{% endif %}">
+      <i class="bi bi-table"></i> All Data
+    </a>
+    
+    <a href="/admin" class="d-flex align-items-center gap-3 {% if request.path.startswith('/admin') %}active{% endif %}">
+      <i class="bi bi-shield-lock"></i> Admin Panel
+    </a>
+    
+    <a href="/logout" class="d-flex align-items-center gap-3 text-danger">
+      <i class="bi bi-box-arrow-right"></i> Logout
+    </a>
+    
+    <div class="mt-auto p-4 text-center small text-light">
+      <div>© 2025</div>
+      <div class="fw-bold">roasteRKopsus</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div id="main">
+    <!-- OPEN BUTTON -->
+    <button class="openbtn" onclick="openNav()" title="Open Sidebar">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <!-- Page Content -->
+    <div class="container-fluid p-4">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show">
+              {{ message }}
+              <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+
+      {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-light border-top py-3 mt-5">
+      <div class="container text-center small text-muted">
+        <strong>M2M tools</strong> — Created by 
+        <span style="color: #d63384; font-weight: 600;">roasteRKopsus</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      const html = document.documentElement;
+      const icon = document.getElementById('theme-icon');
+      const isDark = html.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      html.setAttribute('data-theme', newTheme);
+      icon.className = newTheme === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
+      localStorage.setItem('theme', newTheme);
+    }
+
+    // Load Theme
+    window.onload = () => {
+      const saved = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+      document.getElementById('theme-icon').className = saved === 'dark' ? 'bi bi-sun' : 'bi bi-moon-stars';
+    };
+
+    // W3Schools Sidebar
+    function openNav() {
+      document.getElementById("mySidebar").style.width = "280px";
+    }
+
+    function closeNav() {
+      document.getElementById("mySidebar").style.width = "0";
+    }
+
+    // Auto-close on outside click
+    document.addEventListener('click', function(e) {
+      const sidebar = document.getElementById('mySidebar');
+      const openbtn = document.querySelector('.openbtn');
+      if (sidebar.style.width === '280px' && 
+          !sidebar.contains(e.target) && 
+          !openbtn.contains(e.target)) {
+        closeNav();
+      }
+    });
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

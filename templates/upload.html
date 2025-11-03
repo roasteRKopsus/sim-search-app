@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card">
+  <div class="card-header"><h4>Upload Dataset (.xlsx)</h4></div>
+  <div class="card-body">
+    <form method="POST" enctype="multipart/form-data">
+      <div class="mb-3">
+        <label class="form-label">Provider (e.g. XL, Indosat)</label>
+        <input type="text" name="provider" class="form-control" placeholder="XL" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Excel File (max 200 MB)</label>
+        <input type="file" name="file" class="form-control" accept=".xlsx" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
