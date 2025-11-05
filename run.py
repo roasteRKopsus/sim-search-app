@@ -7,4 +7,4 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     with app.app_context():
         init_db(app)
-    app.run(debug=True, port=5000, use_reloader=True)
+    app.run(debug=True, port=5000, use_reloader=True, host="0.0.0.0")
