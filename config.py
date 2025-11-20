@@ -8,7 +8,7 @@ UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
 class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-key-change-in-prod")
 
-    # Use env DATABASE_URL if exists (Docker), fallback to local Postgres, then SQLite
+
     SQLALCHEMY_DATABASE_URI = os.getenv(
     "DATABASE_URL",
     "postgresql+psycopg://postgres:admin@localhost/simsearch_db"

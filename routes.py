@@ -1,5 +1,4 @@
-# routes.py
-# routes.py
+
 from flask import render_template, request, send_from_directory, flash, redirect, url_for, jsonify
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
@@ -140,9 +139,7 @@ def search():
             sn=m.sn, msisdn=m.msisdn, iccid=m.iccid, imsi=m.imsi,
             matched_sim_id=m.id,  # ← LINK TO REAL SIM
             searched_at=datetime.utcnow())
-    # ... set matched_column ...
-    # db.session.add(log)
-            # Set matched column
+   #find and match
             if m.sn and number in m.sn:
                 log.matched_column, log.matched_value = 'SN', m.sn
             elif m.iccid and number in m.iccid:
