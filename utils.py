@@ -13,7 +13,8 @@ from datetime import datetime
 #     return max(numbers, key=len)
 
 def extract_longest_number(text):
-    if re.search(r'\D', text):
+    if len(text) < 15:
+        re.search(r'\D', text)
         # Case 1: Text is present (e.g., a URL) -> Find the mobile number
         
         # Regex for Indonesian mobile number (08[1-9] followed by 8-10 digits)
@@ -21,6 +22,7 @@ def extract_longest_number(text):
         mobile_matches = re.findall(mobile_pattern, text)
         
         if mobile_matches:
+            print('here 2')
             return mobile_matches[0]
         else:
             # Fallback if text is present but no 08-number is found
@@ -35,8 +37,12 @@ def extract_longest_number(text):
         # The required segment starts at index 6 and is 9 digits long.
         
         if len(text) >= 15:
+            print('here the suns')
+            text_itt = text[-11:]
+            text_ret = '62{}'.format(text_itt)
+
             # Extract the 9 characters starting at index 6
-            return text[-14:]
+            return text_ret
         else:
             return None
 
